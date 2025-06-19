@@ -48,7 +48,6 @@
     <path id="region-12" class="region" fill="#e1f7d5" d="M 680 450 C 780 440, 790 550, 700 560 C 650 580, 640 480, 680 450 Z" />
   </g>
   
-  <!--
   <g id="map-labels">
     <text x="175" y="140" class="label">1</text>
     <text x="390" y="90" class="label">2</text>
@@ -63,5 +62,4 @@
     <text x="490" y="520" class="label">11</text>
     <text x="715" y="505" class="label">12</text>
   </g>
-  -->
 </svg>

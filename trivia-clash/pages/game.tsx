@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Map from "../components/Map";
 import QuestionPanel from "../components/QuestionPanel";
+import { ADJ } from "../utils/adjacency";
 
 type Owner = "unowned" | "player1" | "player2";
 
@@ -32,6 +33,15 @@ export default function GamePage() {
     }
 
     // ─── Faza de atac (cu întrebare) ─────────────────────────────────
+    // daca teritoriul selectat nu este adiacent cu unul deja deținut
+    const ownedRegions = Object.keys(regionOwner).filter(
+      (id) => regionOwner[id] === turn
+    );
+    const isAdjacent = ownedRegions.some((id) =>
+      // verifică dacă regiunea curentă este adiacentă cu oricare regiune
+      ADJ[id]?.includes(regionId)
+    );
+    if (!isAdjacent) return;
     setActiveRegion(regionId);
   };
 
