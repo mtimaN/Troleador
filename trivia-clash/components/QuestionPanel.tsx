@@ -3,66 +3,85 @@ import { useEffect, useState } from "react";
 interface Props {
   regionId: string;
   onResult: (correct: boolean) => void;
+  topic: string;
+  difficulty?: string;
 }
 
-type Q = { question: string; options: string[]; answer: string };
+type Question = {
+  question: string;
+  options: string[];
+  answer: string;
+};
 
-export default function QuestionPanel({ regionId, onResult }: Props) {
-  const [q, setQ] = useState<Q | null>(null);
-  const [picked, setPicked] = useState<string>("");
+export default function QuestionPanel({
+  regionId,
+  onResult,
+  topic,
+  difficulty = "medium",
+}: Props) {
+  const [question, setQuestion] = useState<Question | null>(null);
+  const [selected, setSelected] = useState<string>("");
 
-  // luam intrebarea o singura data
   useEffect(() => {
+    setQuestion(null);
+    setSelected("");
     fetch("/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic: "general", difficulty: "medium" }),
+      body: JSON.stringify({ topic, difficulty }),
     })
       .then((r) => r.json())
-      .then(setQ)
-      .catch(console.error);
-  }, []);
+      .then(setQuestion)
+      .catch(() => {
+        setQuestion({
+          question: "Eroare la încărcarea întrebării.",
+          options: [],
+          answer: "",
+        });
+      });
+  }, [topic, difficulty]);
 
-  if (!q) return <p className="p-4">Loading question…</p>;
+  if (!question) return <p className="p-4">Se încarcă întrebarea…</p>;
+  if (question.options.length === 0)
+    return <p className="p-4">Nicio opțiune disponibilă.</p>;
 
   const choose = (opt: string) => {
-    if (picked) return;
-    setPicked(opt);
-    const correct = opt === q.answer;
+    if (selected) return;
+    setSelected(opt);
+    const correct = opt === question.answer;
     setTimeout(() => onResult(correct), 1200);
   };
 
-  // helper care decide clasa de culoare dupa ce s-a raspuns
   const btnClass = (opt: string) => {
-    if (!picked) return "answerBtn neutral"; // inca nu alege nimic
-    if (opt === q.answer) return "answerBtn correct";
-    if (opt === picked) return "answerBtn wrong";
+    if (!selected) return "answerBtn neutral";
+    if (opt === question.answer) return "answerBtn correct";
+    if (opt === selected) return "answerBtn wrong";
     return "answerBtn neutral";
   };
 
   return (
     <div>
       <h3 className="font-semibold mb-2">
-        Region&nbsp;<span className="text-indigo-600">{regionId}</span>
+        Region <span className="text-indigo-600">{regionId}</span>
       </h3>
+      <p className="mb-4">{question.question}</p>
 
-      <p className="mb-4">{q.question}</p>
-
-      {q.options.map((opt) => (
+      {question.options.map((opt) => (
         <button
           key={opt}
           className={btnClass(opt)}
           onClick={() => choose(opt)}
-          disabled={!!picked}
+          disabled={!!selected}
         >
           {opt}
         </button>
       ))}
 
-      {/* feedback text sub butoane */}
-      {picked && (
-        <p className={`feedback ${picked === q.answer ? "correct" : "wrong"}`}>
-          {picked === q.answer ? "Corect!" : `Gresit! Raspunsul era: ${q.answer}`}
+      {selected && (
+        <p className={`feedback ${selected === question.answer ? "correct" : "wrong"}`}>
+          {selected === question.answer
+            ? "Corect!"
+            : `Greșit! Răspunsul corect era: ${question.answer}`}
         </p>
       )}
     </div>

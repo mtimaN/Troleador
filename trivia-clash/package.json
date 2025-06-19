@@ -3,7 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only --ignore-watch .next server.ts",
+    "dev": "next dev",
+
+    "dev:ws": "ts-node-dev --respawn --transpile-only server/wsServer.ts",
+
+    "dev:all": "concurrently \"npm run dev\" \"npm run dev:ws\"",
+
     "build": "next build",
     "start": "NODE_ENV=production node .next/server/server.js",
     "lint": "next lint"
@@ -23,10 +28,14 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
+    "concurrently": "^8.2.2",
     "eslint": "^9",
     "eslint-config-next": "15.3.4",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5"
+    "typescript": "^5.8.3",
+    "ws": "^8.18.2"
   }
 }

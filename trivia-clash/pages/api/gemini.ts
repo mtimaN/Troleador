@@ -17,11 +17,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   "question": "...",
   "options": ["A", "B", "C", "D"],
   "answer": "..."
-}`;
-
+}
+  with a probabiltity of 0.4 to make meme topics and jokes as well`;
+  const myTemperature = 0.2;
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-thinking-exp-1219:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: {
@@ -33,6 +34,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               parts: [{ text: prompt }],
             },
           ],
+          generationConfig: {
+            temperature: myTemperature,
+          },
         }),
       }
     );
