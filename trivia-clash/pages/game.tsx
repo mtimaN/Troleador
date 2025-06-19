@@ -21,17 +21,21 @@ export default function GamePage() {
     setTurn((prev) => (prev === "player1" ? "player2" : "player1"));
 
   const handleRegionClick = (regionId: string) => {
-    const alreadyOwned = regionOwner[regionId] && regionOwner[regionId] !== "unowned";
-    if (alreadyOwned) return;
-
+    console.log("Clicked region:", regionId, "by player:", turn);
     // ─── FAZA DE START ────────────────────────────────────────────────
     if (!initialClaim[turn]) {
+      const alreadyOwned = regionOwner[regionId] && regionOwner[regionId] !== "unowned";
+      if (alreadyOwned) return;
       setRegionOwner((prev) => ({ ...prev, [regionId]: turn }));
       setInitialClaim((prev) => ({ ...prev, [turn]: true }));
       switchTurn();
       return;
     }
-
+    // nu putem sa ne atacam pe noi insine
+    if (regionOwner[regionId] === turn) {
+      console.log("Cannot attack own region:", regionId);
+      return;
+    }
     // ─── Faza de atac (cu întrebare) ─────────────────────────────────
     // daca teritoriul selectat nu este adiacent cu unul deja deținut
     const ownedRegions = Object.keys(regionOwner).filter(
@@ -41,6 +45,7 @@ export default function GamePage() {
       // verifică dacă regiunea curentă este adiacentă cu oricare regiune
       ADJ[id]?.includes(regionId)
     );
+    console.log("isAdjacent:", isAdjacent, "for region:", regionId);
     if (!isAdjacent) return;
     setActiveRegion(regionId);
   };
@@ -73,7 +78,6 @@ export default function GamePage() {
           currentPlayer={turn}
           regionOwner={regionOwner}
           onSelect={handleRegionClick}
-          disabled={!!activeRegion}
         />
       </div>
 
