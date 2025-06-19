@@ -1,0 +1,137 @@
+/* --- layout de bază --- */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #eef2f7;
+  font-family: system-ui, sans-serif;
+}
+
+.topBar {
+  background: linear-gradient(90deg, #7928ca, #ff0080);
+  color: #fff;
+  padding: 12px 0;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* --- harta (stânga) --- */
+.mapPane {
+  flex: 2;
+  padding: 24px;
+  overflow: auto;
+}
+
+.mapWrapper {
+  background: #fff;
+  border: 1px solid #cbd5e1;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.turnBox {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.turnBox .blue {
+  color: #2563eb;
+}
+.turnBox .red {
+  color: #dc2626;
+}
+
+.startHint {
+  font-style: italic;
+  color: #92400e;
+  margin-bottom: 12px;
+}
+
+/* --- QUESTION PANEL drawer (desktop) + popup (mobile) --- */
+.questionDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 42%; /* era 32%, acum mai lat */
+  max-width: 520px; /* crestem si limita maxima */
+  height: 100%;
+  background: #fff;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  padding: 32px; /* mai mult padding */
+  font-size: 18px; /* font mai mare global in drawer */
+  line-height: 1.5;
+}
+
+
+@media (max-width: 768px) {
+  .questionDrawer {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%; /* un pic mai lat pe mobil */
+    max-width: 480px;
+    height: auto;
+    max-height: 90%;
+    border-radius: 16px;
+    font-size: 17px;
+  }
+}
+
+
+/* --- butoane de răspuns --- */
+.answerBtn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.answerBtn:hover {
+  filter: brightness(1.05);
+}
+
+/* culori când se alege răspunsul */
+.correct {
+  background: #4ade80;
+  color: #065f46;
+}
+.wrong {
+  background: #f87171;
+  color: #7f1d1d;
+}
+.neutral {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+/* mesaj feedback */
+.feedback {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  margin-top: 18px;
+}
+.feedback.correct {
+  color: #16a34a;
+}
+.feedback.wrong {
+  color: #dc2626;
+}

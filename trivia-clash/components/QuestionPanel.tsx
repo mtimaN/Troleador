@@ -1,64 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   regionId: string;
   onResult: (correct: boolean) => void;
 }
 
-export default function QuestionPanel({ regionId, onResult }: Props) {
-  const [question, setQuestion] = useState<{
-    question: string;
-    options: string[];
-    answer: string;
-  } | null>(null);
-  const [selected, setSelected] = useState<string>("");
+type Q = { question: string; options: string[]; answer: string };
 
-  // 1. La prima randare fetch-uim întrebarea
-  useState(() => {
+export default function QuestionPanel({ regionId, onResult }: Props) {
+  const [q, setQ] = useState<Q | null>(null);
+  const [picked, setPicked] = useState<string>("");
+
+  // luam intrebarea o singura data
+  useEffect(() => {
     fetch("/api/gemini", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ topic: "general", difficulty: "medium" }),
     })
       .then((r) => r.json())
-      .then(setQuestion);
-  });
+      .then(setQ)
+      .catch(console.error);
+  }, []);
 
-  if (!question) return <p className="p-4">Loading question…</p>;
+  if (!q) return <p className="p-4">Loading question…</p>;
 
   const choose = (opt: string) => {
-    if (selected) return;
-    setSelected(opt);
-    const correct = opt === question.answer;
+    if (picked) return;
+    setPicked(opt);
+    const correct = opt === q.answer;
     setTimeout(() => onResult(correct), 1200);
   };
 
+  // helper care decide clasa de culoare dupa ce s-a raspuns
+  const btnClass = (opt: string) => {
+    if (!picked) return "answerBtn neutral"; // inca nu alege nimic
+    if (opt === q.answer) return "answerBtn correct";
+    if (opt === picked) return "answerBtn wrong";
+    return "answerBtn neutral";
+  };
+
   return (
-    <aside className="w-80 border-l p-4">
+    <div>
       <h3 className="font-semibold mb-2">
         Region&nbsp;<span className="text-indigo-600">{regionId}</span>
       </h3>
-      <p className="mb-4">{question.question}</p>
 
-      {question.options.map((opt, i) => (
+      <p className="mb-4">{q.question}</p>
+
+      {q.options.map((opt) => (
         <button
-          key={i}
+          key={opt}
+          className={btnClass(opt)}
           onClick={() => choose(opt)}
-          className={`block w-full text-left mb-2 p-2 border rounded
-            ${
-              selected
-                ? opt === question.answer
-                  ? "bg-green-300"
-                  : opt === selected
-                  ? "bg-red-300"
-                  : "opacity-60"
-                : "hover:bg-gray-100"
-            }`}
-          disabled={!!selected}
+          disabled={!!picked}
         >
           {opt}
         </button>
       ))}
-    </aside>
+
+      {/* feedback text sub butoane */}
+      {picked && (
+        <p className={`feedback ${picked === q.answer ? "correct" : "wrong"}`}>
+          {picked === q.answer ? "Corect!" : `Gresit! Raspunsul era: ${q.answer}`}
+        </p>
+      )}
+    </div>
   );
 }
