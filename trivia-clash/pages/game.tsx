@@ -1,0 +1,76 @@
+import { useState } from "react";
+import Map from "../components/Map";
+import QuestionPanel from "../components/QuestionPanel";
+
+type Owner = "unowned" | "player1" | "player2";
+
+export default function GamePage() {
+  const [turn, setTurn] = useState<Owner>("player1");
+  const [regionOwner, setRegionOwner] = useState<Record<string, Owner>>({});
+  const [activeRegion, setActiveRegion] = useState<string>("");
+
+  // fiecare jucător alege la început un teritoriu de start
+  const [initialClaim, setInitialClaim] = useState<Record<Owner, boolean>>({
+    player1: false,
+    player2: false,
+    unowned: true, // ignorat
+  });
+
+  const switchTurn = () =>
+    setTurn((prev) => (prev === "player1" ? "player2" : "player1"));
+
+  const handleRegionClick = (regionId: string) => {
+    const alreadyOwned = regionOwner[regionId] && regionOwner[regionId] !== "unowned";
+    if (alreadyOwned) return;
+
+    // ─── FAZA DE START ────────────────────────────────────────────────
+    if (!initialClaim[turn]) {
+      setRegionOwner((prev) => ({ ...prev, [regionId]: turn }));
+      setInitialClaim((prev) => ({ ...prev, [turn]: true }));
+      switchTurn();
+      return;
+    }
+
+    // ─── Faza de atac (cu întrebare) ─────────────────────────────────
+    setActiveRegion(regionId);
+  };
+
+  const handleResult = (correct: boolean) => {
+    if (correct) {
+      setRegionOwner((prev) => ({ ...prev, [activeRegion]: turn }));
+    }
+    setActiveRegion("");
+    switchTurn();
+  };
+
+  // pentru afișare: dacă jucătorul curent nu și-a ales teritoriul de start
+  const needStart = !initialClaim[turn];
+
+  return (
+    <main className="flex">
+      <div className="flex flex-col items-center p-4 gap-2">
+        <h1 className="text-2xl font-bold">Triviador-AI</h1>
+        <p>
+          Turn:&nbsp;
+          <span className={turn === "player1" ? "text-blue-600" : "text-red-600"}>
+            {turn}
+          </span>
+        </p>
+        {needStart && <p className="text-sm italic">Selectează teritoriul de început!</p>}
+
+        {/* Harta */}
+        <Map
+          currentPlayer={turn}
+          regionOwner={regionOwner}
+          onSelect={handleRegionClick}
+          disabled={!!activeRegion}
+        />
+      </div>
+
+      {/* Panou întrebare */}
+      {activeRegion && (
+        <QuestionPanel regionId={activeRegion} onResult={handleResult} />
+      )}
+    </main>
+  );
+}

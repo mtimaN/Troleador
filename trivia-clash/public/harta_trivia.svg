@@ -1,0 +1,67 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg" aria-label="A fictional map with 12 distinct, numbered regions.">
+  <style>
+    .region {
+      stroke: #333333;
+      stroke-width: 2;
+      stroke-linejoin: round;
+      transition: filter 0.2s ease-in-out;
+    }
+    .region:hover {
+      filter: brightness(1.1);
+      cursor: pointer;
+    }
+    .label {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 24px;
+      font-weight: bold;
+      fill: #222222;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      pointer-events: none; /* Makes text non-interactive */
+    }
+  </style>
+
+  <g id="map-regions">
+    <!-- Region 1 (Top Left) -->
+    <path id="region-1" class="region" fill="#a8d8ea" d="M 10 150 C 100 50, 200 60, 280 10 L 300 150 L 200 200 L 100 220 Z" />
+    <!-- Region 2 -->
+    <path id="region-2" class="region" fill="#e1f7d5" d="M 280 10 C 350 40, 450 20, 500 50 L 480 160 L 300 150 Z" />
+    <!-- Region 3 -->
+    <path id="region-3" class="region" fill="#fefac0" d="M 500 50 C 580 30, 680 80, 750 120 L 700 250 L 480 160 Z" />
+    <!-- Region 4 (Left Middle) -->
+    <path id="region-4" class="region" fill="#ffb3ba" d="M 100 220 L 200 200 L 300 150 L 320 280 L 150 350 Z" />
+    <!-- Region 5 (Center) -->
+    <path id="region-5" class="region" fill="#d3a5d8" d="M 300 150 L 480 160 L 450 300 L 320 280 Z" />
+    <!-- Region 6 (Right Middle) -->
+    <path id="region-6" class="region" fill="#a8d8ea" d="M 480 160 L 700 250 L 650 380 L 450 300 Z" />
+    <!-- Region 7 (Bottom Left) -->
+    <path id="region-7" class="region" fill="#e1f7d5" d="M 150 350 L 320 280 L 350 400 L 200 500 Z" />
+    <!-- Region 8 -->
+    <path id="region-8" class="region" fill="#fefac0" d="M 320 280 L 450 300 L 480 420 L 350 400 Z" />
+    <!-- Region 9 (Bottom Right) -->
+    <path id="region-9" class="region" fill="#ffb3ba" d="M 450 300 L 650 380 L 600 520 L 480 420 Z" />
+    <!-- Region 10 (Far Bottom Left) -->
+    <path id="region-10" class="region" fill="#d3a5d8" d="M 200 500 L 350 400 L 380 550 L 250 580 Z" />
+    <!-- Region 11 (Far Bottom Right) -->
+    <path id="region-11" class="region" fill="#a8d8ea" d="M 380 550 L 480 420 L 600 520 L 500 590 Z" />
+    <!-- Region 12 (Island) -->
+    <path id="region-12" class="region" fill="#e1f7d5" d="M 680 450 C 780 440, 790 550, 700 560 C 650 580, 640 480, 680 450 Z" />
+  </g>
+  
+  <!--
+  <g id="map-labels">
+    <text x="175" y="140" class="label">1</text>
+    <text x="390" y="90" class="label">2</text>
+    <text x="600" y="150" class="label">3</text>
+    <text x="190" y="260" class="label">4</text>
+    <text x="375" y="225" class="label">5</text>
+    <text x="570" y="280" class="label">6</text>
+    <text x="240" y="380" class="label">7</text>
+    <text x="400" y="350" class="label">8</text>
+    <text x="560" y="420" class="label">9</text>
+    <text x="290" y="480" class="label">10</text>
+    <text x="490" y="520" class="label">11</text>
+    <text x="715" y="505" class="label">12</text>
+  </g>
+  -->
+</svg>

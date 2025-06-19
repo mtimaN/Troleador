@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    /* ------------------ comportament standard Next.js ------------------ */
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -13,15 +14,19 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "plugins": [{ "name": "next" }],
+
+    /* ------------------ aliasul `@/` ------------------ */
+    "baseUrl": ".",               // pornește căutarea din rădăcina repo-ului
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./*", "./src/*"]   // permite importul din orice subfolder
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }
